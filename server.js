@@ -1,18 +1,59 @@
 // express und http Module importieren. Sie sind dazu da, die HTML-Dateien
 // aus dem Ordner "public" zu veröffentlichen.
+// add express and http module
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
-var port = 3000;
+// add Socket.io
+var io = require('socket.io')(server);
+// oif port is not set with an environment variable use port 3000
+var port = process.env.PORT || 3000;
 
-// Mit diesem Kommando starten wir den Webserver.
+// start web server
 server.listen(port, function () {
-// Wir geben einen Hinweis aus, dass der Webserer läuft.
-console.log('Webserver läuft und hört auf Port %d', port);
+    // write note that web server is running
+    console.log('Webserver läuft und hört auf Port %d', port);
 });
 
-// Hier teilen wir express mit, dass die öffentlichen HTML-Dateien
-// im Ordner "public" zu finden sind.
+// add path to public html files
 app.use(express.static(__dirname + '/public'));
 
-// Fertig. Wir haben unseren ersten, eigenen Webserver programmiert :-)
+// === Code for Chat-Server - Socket.io code
+ 
+io.on('connection', function (socket) {
+    // socket represents the socket connection to client
+    
+    var addedUser = false;
+    
+    // if user enters his name do...
+    socket.on('add user', function (username) {
+        // store username in current socket connection
+        socket.username = username;
+        addedUser = true;
+            
+        // send message to client so that he knows he is logged in
+        socket.emit('login');
+            
+        // inform all other clients
+        socket.broadcast.emit('user joined', socket.username);
+    });
+    
+    // when someone sends a message, inform all other clients
+    socket.on('new message', function (data) {
+        // send message to other clients
+        socket.broadcast.emit('new message', {
+            username: socket.username,
+            message: data
+        });
+    });
+    
+    // when someone disconnects inform all other clients
+    // users do not have to click on a button to disconnect, it is enough to close the browser window
+    socket.on('disconnect', function () {
+        if (addedUser) {
+            // inform other clients
+            socket.broadcast.emit('user left', socket.username);
+        }
+    });
+});
+
