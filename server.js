@@ -33,7 +33,7 @@ io.on('connection', function (socket) {
     var addedUser = false;
     
     // if user enters his name do...
-    socket.on('add user', function (username) {
+    socket.on('add_user', function (username) {
         // store username in current socket connection
         socket.username = username;
         addedUser = true;
@@ -42,15 +42,15 @@ io.on('connection', function (socket) {
         socket.emit('login');
             
         // inform all other clients
-        socket.broadcast.emit('user joined', socket.username);
+        socket.broadcast.emit('user_joined', socket.username);
     });
     
     // when someone sends a message, inform all other clients
-    socket.on('new message', function (data) {
+    socket.on('new_message', function (data) {
         // send message to other clients
-        socket.broadcast.emit('new message', {
+        socket.broadcast.emit('new_message', {
             username: socket.username,
-            message: data + "WENT THROUGH SERVER"
+            message: data
         });
     });
     
@@ -59,7 +59,7 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         if (addedUser) {
             // inform other clients
-            socket.broadcast.emit('user left', socket.username);
+            socket.broadcast.emit('user_left', socket.username);
         }
     });
 });

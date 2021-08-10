@@ -50,7 +50,7 @@ $(function () {
     
       // Server mit Socket.io über den neuen Benutzer informieren. Wenn die
       // Anmeldung klappt wird der Server die "login"-Nachricht zurückschicken.
-      socket.emit('add user', username);
+      socket.emit('add_user', username);
     }
     }
     
@@ -69,7 +69,7 @@ $(function () {
           
       // Server über neue Nachricht informieren. Der Server wird die Nachricht
       // an alle anderen Clients verteilen.
-      socket.emit('new message', message);
+      socket.emit('new_message', message);
     }
     }
     
@@ -96,17 +96,17 @@ $(function () {
     });
     
     // Server schickt "new message": Neue Nachricht zum Chat-Protokoll hinzufügen
-    socket.on('new message', function (data) {
+    socket.on('new_message', function (data) {
     addChatMessage(data);
     });
     
     // Server schickt "user joined": Neuen Benutzer im Chat-Protokoll anzeigen
-    socket.on('user joined', function (data) {
+    socket.on('user_joined', function (data) {
     log(data + ' joined');
     });
     
     // Server schickt "user left": Benutzer, der gegangen ist, im Chat-Protokoll anzeigen
-    socket.on('user left', function (data) {
+    socket.on('user_left', function (data) {
     log(data + ' left');
     });
     });
