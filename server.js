@@ -3,9 +3,16 @@
 // add express and http module
 var express = require('express');
 var app = express();
+
 var server = require('http').createServer(app);
 // add Socket.io
-var io = require('socket.io')(server);
+var io = require('socket.io')(server, {
+    cors: {
+      origin: "http://localhost:8080",
+      credentials: true,
+      perMessageDeflate :false
+    }
+  });
 // oif port is not set with an environment variable use port 3000
 var port = process.env.PORT || 3000;
 
@@ -43,7 +50,7 @@ io.on('connection', function (socket) {
         // send message to other clients
         socket.broadcast.emit('new message', {
             username: socket.username,
-            message: data
+            message: data + "WENT THROUGH SERVER"
         });
     });
     
