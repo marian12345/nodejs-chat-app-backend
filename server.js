@@ -8,7 +8,7 @@ var server = require('http').createServer(app);
 // add Socket.io
 var io = require('socket.io')(server, {
     cors: {
-      origin: "https://marian12345.github.io/new-vue-project/",
+      origin: ["https://marian12345.github.io/new-vue-project/", "http://localhost:8080"],
       credentials: true,
       perMessageDeflate :false
     }
