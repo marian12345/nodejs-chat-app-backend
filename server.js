@@ -8,11 +8,13 @@ var server = require('http').createServer(app);
 // add Socket.io
 var io = require('socket.io')(server, {
     cors: {
-      origin: "http://localhost:8080",
+      origin: "https://marian12345.github.io/new-vue-project/",
       credentials: true,
       perMessageDeflate :false
     }
-  });
+});
+//origin: "http://localhost:8080",
+
 // oif port is not set with an environment variable use port 3000
 var port = process.env.PORT || 3000;
 
