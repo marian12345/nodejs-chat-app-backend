@@ -2,9 +2,13 @@
 // aus dem Ordner "public" zu veröffentlichen.
 // add express and http module
 var express = require('express');
+var fs = require('fs');
 var app = express();
 
 var server = require('http').createServer(app);
+
+var httpPort = 3000;
+var httpsPort = 443;
 // add Socket.io
 var io = require('socket.io')(server, {
     cors: {
@@ -13,15 +17,36 @@ var io = require('socket.io')(server, {
       perMessageDeflate :false
     }
 });
-//origin: "http://localhost:8080",
 
-// oif port is not set with an environment variable use port 3000
-var port = process.env.PORT || 3000;
+// Set up https server
+if (process.env.NODE_ENV === 'production') {
+    console.log("Production mode on");
+    // use actual http port
+    httpPort = 80;
+    
+    // Certificate for Domain 1
+    const privateKey1 = fs.readFileSync('/etc/letsencrypt/live/www.vivaldiseinhaus.de/privkey.pem', 'utf8');
+    const certificate1 = fs.readFileSync('/etc/letsencrypt/live/www.vivaldiseinhaus.de/cert.pem', 'utf8');
+    const ca1 = fs.readFileSync('/etc/letsencrypt/live/www.vivaldiseinhaus.de/chain.pem', 'utf8');
+    const certCredentials = {
+        key: privateKey1,
+        cert: certificate1,
+        ca: ca1
+    };
 
-// start web server
-server.listen(port, function () {
+    const httpsServer = https.createServer(certCredentials, app);
+
+    // start https web server
+    httpsServer.listen(httpsPort, function () {
+        // write note that web server is running
+        console.log('HTTPS Webserver läuft und hört auf https Port %d', httpsPort);
+    });
+}
+
+// start http web server
+server.listen(httpPort, function () {
     // write note that web server is running
-    console.log('Webserver läuft und hört auf Port %d', port);
+    console.log('HTTP Webserver läuft und hört auf Port %d', httpPort);
 });
 
 // add path to public html files
