@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'production') {
 // add Socket.io
 var io = require('socket.io')(server, {
     cors: {
-      origin: ["https://marian12345.github.io/new-vue-project/", "http://localhost:8080"],
+      origin: ["https://marian12345.github.io", "http://localhost:8080"],
       credentials: true,
       perMessageDeflate :false
     }
