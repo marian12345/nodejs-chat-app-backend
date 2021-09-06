@@ -13,5 +13,8 @@ RUN npm ci
 # Bundle app source
 COPY . .
 
-EXPOSE 3000
+# Heroku assigns ports itself and uses the process.env.PORT 
+# variable for that. That is why we don't EXPOSE a port here
+# EXPOSE 3000
+
 CMD [ "npm", "run", "start" ]

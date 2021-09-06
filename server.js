@@ -9,6 +9,11 @@ var server = require('http').createServer(app);
 var port = process.env.PORT || 3000;
 
 // change from http to https server when in production
+/**
+ * The following code section is only executed in combination with certbot and
+ * when the application is deployed on a public server (production mode). 
+ * It is not used when deplyoying on Heroku
+ */
 if (process.env.NODE_ENV === 'production') {
     console.log("production mode on");
     // use https port
