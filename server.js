@@ -6,7 +6,7 @@ var fs = require('fs');
 var app = express();
 
 var server = require('http').createServer(app);
-var port = 3000;
+var port = process.env.PORT || 3000;
 
 // change from http to https server when in production
 if (process.env.NODE_ENV === 'production') {
