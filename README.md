@@ -4,6 +4,6 @@ It is currently deployed on Heroku.
 
 The Idea is that users can give themselves a username and chat with eachother. 
 
-Currently there is a Vuejs Frontend existing which can be found [here](https://github.com/marian12345/vue-chat-app-frontend)
+Currently there is one Vuejs Frontend existing which can be found [here](https://github.com/marian12345/vue-chat-app-frontend)
 
 
